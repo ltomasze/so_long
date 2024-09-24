@@ -6,14 +6,13 @@
 #    By: ltomasze <ltomasze@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/20 13:01:15 by ltomasze          #+#    #+#              #
-#    Updated: 2024/09/20 14:33:06 by ltomasze         ###   ########.fr        #
+#    Updated: 2024/09/24 10:53:09 by ltomasze         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 PROGRAM = so_long
 NAME = $(PROGRAM).a
-MAIN = so_long.c
-SOURCES = 
+SOURCES = src/get_next_line_utils.c src/get_next_line.c
 OBJECTS = $(SOURCES:%.c=%.o)
 CC = cc
 CFLAGS = -Wall -Wextra -Werror -Iincludes -g
@@ -32,7 +31,7 @@ $(NAME): $(OBJECTS)
 	ar rcs $(NAME) $(OBJECTS)
 
 $(PROGRAM): $(MINILIBX) $(LIBFT) $(NAME)
-	$(CC) $(CFLAGS) $(MAIN) $(NAME) $(LIBFT) $(MINILIBX) -o $(PROGRAM) -lXext -lX11
+	$(CC) $(CFLAGS) $(MAIN) $(NAME) $(LIBFT) $(MINILIBX) -o $(PROGRAM) -lXext -lX11 -lm -lz -D LINUX -no-pie
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
