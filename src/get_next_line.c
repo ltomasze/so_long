@@ -6,11 +6,12 @@
 /*   By: ltomasze <ltomasze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 12:36:46 by ltomasze          #+#    #+#             */
-/*   Updated: 2024/04/11 14:29:36 by ltomasze         ###   ########.fr       */
+/*   Updated: 2024/09/24 12:47:50 by ltomasze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+#include "../libft/libft.h"
 
 char	*get_next_line(int fd)
 {
@@ -29,7 +30,7 @@ char	*get_next_line(int fd)
 		if (read_b == -1)
 			return (NULL);
 		buffer[read_b] = '\0';
-		temp = ft_strjoin(temp, buffer);
+		temp = ft_strjoin2(temp, buffer);
 		if (find_n(temp))
 			break ;
 	}

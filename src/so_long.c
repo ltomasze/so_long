@@ -1,29 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*   so_long.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ltomasze <ltomasze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/03 12:37:07 by ltomasze          #+#    #+#             */
-/*   Updated: 2024/09/24 12:49:11 by ltomasze         ###   ########.fr       */
+/*   Created: 2024/09/24 11:59:44 by ltomasze          #+#    #+#             */
+/*   Updated: 2024/09/24 12:15:51 by ltomasze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef GET_NEXT_LINE_H
-# define GET_NEXT_LINE_H
-# ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 42
-# endif
-# include <stdio.h>
-# include <unistd.h>
-# include <stdlib.h>
-# include <fcntl.h>
+#include "../includes/so_long.h"
 
-char	*ft_strdup2(char *s, int len);
-char	*ft_strjoin2(char *s1, char *s2);
-int		find_n(char	*temp);
-char	*put_line(char **temp);
-char	*get_next_line(int fd);
+int main(void)
+{
+    void *mlx;
+    void *win;
 
-#endif
+    mlx = mlx_init(); // Inicjalizuj MLX
+    if (!mlx)
+        return (1);
+    win = mlx_new_window(mlx, 800, 600, "So Long!"); // Twórz nowe okno
+    if (!win)
+        return (1);
+    mlx_loop(mlx); // Rozpocznij pętlę MLX
+    return (0);
+}
