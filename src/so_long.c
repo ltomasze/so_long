@@ -6,7 +6,7 @@
 /*   By: ltomasze <ltomasze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 11:59:44 by ltomasze          #+#    #+#             */
-/*   Updated: 2024/09/25 09:09:45 by ltomasze         ###   ########.fr       */
+/*   Updated: 2024/09/25 09:14:40 by ltomasze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ int close_window_cross(t_data *data) {
     mlx_destroy_display(data->mlx);
     free(data->mlx);
     exit(0); // Zakończ program
-    return (0);
 }
 
 int close_window(int keycode, t_data *data) {
