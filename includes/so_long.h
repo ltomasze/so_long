@@ -6,7 +6,7 @@
 /*   By: ltomasze <ltomasze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 14:19:55 by ltomasze          #+#    #+#             */
-/*   Updated: 2024/09/24 14:34:05 by ltomasze         ###   ########.fr       */
+/*   Updated: 2024/09/25 09:09:47 by ltomasze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ typedef struct s_data {
 }           t_data;
 
 void my_mlx_pixel_put(t_data *data, int x, int y, int color);
+int close_window_cross(t_data *data);
 int close_window(int keycode, t_data *data);
 
 #endif
