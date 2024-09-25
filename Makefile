@@ -6,20 +6,24 @@
 #    By: ltomasze <ltomasze@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/20 13:01:15 by ltomasze          #+#    #+#              #
-#    Updated: 2024/09/24 12:44:27 by ltomasze         ###   ########.fr        #
+#    Updated: 2024/09/25 16:41:08 by ltomasze         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-PROGRAM = so_long
-NAME = $(PROGRAM).a
-SOURCES = src/get_next_line_utils.c src/get_next_line.c src/so_long.c
+NAME = so_long
+SOURCES = src/get_next_line_utils.c src/get_next_line.c src/so_long.c src/so_long_utils_game.c \
+src/so_long_utils.c src/so_long_utils_map.c
 OBJECTS = $(SOURCES:%.c=%.o)
 CC = cc
 CFLAGS = -Wall -Wextra -Werror -Iincludes -g
+FT_PRINTF = ft_printf/libftprintf.a
 LIBFT = libft/libft.a
 MINILIBX = minilibx-linux/libmlx_Linux.a
 
-all: $(PROGRAM)
+all: $(NAME)
+
+$(FT_PRINTF):
+	$(MAKE) -C ft_printf
 
 $(LIBFT):
 	$(MAKE) -C libft
@@ -27,24 +31,23 @@ $(LIBFT):
 $(MINILIBX):
 	$(MAKE) -C minilibx-linux
 
-$(NAME): $(OBJECTS)
-	ar rcs $(NAME) $(OBJECTS)
-
-$(PROGRAM): $(OBJECTS) $(MINILIBX) $(LIBFT)
-	$(CC) $(CFLAGS) $(OBJECTS) $(LIBFT) $(MINILIBX) -o $(PROGRAM) -lXext -lX11 -lm -lz -D LINUX -no-pie
+$(NAME): $(OBJECTS) $(FT_PRINTF) $(MINILIBX) $(LIBFT)
+	$(CC) $(CFLAGS) $(OBJECTS) $(FT_PRINTF) $(LIBFT) $(MINILIBX) -o $(NAME) -lXext -lX11 -lm -lz -D LINUX -no-pie
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
 	rm -f $(OBJECTS)
+	$(MAKE) -C ft_printf clean
 	$(MAKE) -C libft clean
 	$(MAKE) -C minilibx-linux clean
 
 fclean: clean
-	rm -f $(NAME) $(PROGRAM)
+	rm -f $(NAME)
+	$(MAKE) -C ft_printf fclean
 	$(MAKE) -C libft fclean
-	$(MAKE) -C minilibx-linux clean
+	$(MAKE) -C minilibx-linux fclean
 
 re: fclean all
 

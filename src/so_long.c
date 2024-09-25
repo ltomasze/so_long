@@ -6,59 +6,73 @@
 /*   By: ltomasze <ltomasze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 11:59:44 by ltomasze          #+#    #+#             */
-/*   Updated: 2024/09/25 09:14:40 by ltomasze         ###   ########.fr       */
+/*   Updated: 2024/09/25 16:42:48 by ltomasze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/so_long.h"
 
-// Funkcja do rysowania piksela
-void my_mlx_pixel_put(t_data *data, int x, int y, int color) {
-    char *dst;
-
-    dst = data->addr + (y * data->line_length + x * (data->bits_per_pixel / 8));
-    *(unsigned int*)dst = color;
+void	init_game(t_game *game)
+{
+	game->mlx = mlx_init();
+	if (!game->mlx)
+		ft_error("Error initializing MLX");
+	game->win = mlx_new_window(game->mlx, game->width * 100,
+			game->height * 100, "so_long");
+	if (!game->win)
+		ft_error("Error creating window");
+	game->move_count = 0;
+	game->collected_items = 0;
+	load_textures(game);
+	draw_map(game);
+	mlx_key_hook(game->win, press_button, game);
+	mlx_hook(game->win, 17, 0, close_window, game);
 }
 
-// Funkcja do zamykania okna za pomocą "X"
-int close_window_cross(t_data *data) {
-    mlx_destroy_image(data->mlx, data->img); // Zniszcz obraz
-    mlx_destroy_window(data->mlx, data->mlx_win); // Zniszcz okno
-    mlx_destroy_display(data->mlx);
-    free(data->mlx);
-    exit(0); // Zakończ program
+int	setup_map(const char *file, t_game *game)
+{
+	int		fd;
+	char	*line;
+	int		row;
+
+	if (get_map_size(file, game) == -1)
+		return (-1);
+	init_map_memory(game);
+	fd = open(file, O_RDONLY);
+	if (fd < 0)
+		ft_error("Error opening map file");
+	row = 0;
+	while (1)
+	{
+		line = get_next_line(fd);
+		if (!line)
+			break ;
+		game->map[row] = ft_strtrim(line, "\n");
+		if (!game->map[row])
+			ft_error("Error duplicating map line");
+		free(line);
+		row++;
+	}
+	game->map[row] = NULL;
+	close_and_validate_map(fd, game);
+	return (0);
 }
 
-int close_window(int keycode, t_data *data) {
-    if (keycode == 65307) // ESC
-    {
-        close_window_cross(data); // Zakończ program, jak naciśnięto ESC
-    }
-    return (0);
-}
+int	main(int argc, char **argv)
+{
+	t_game	game;
 
-int main(void) {
-    t_data img; // Tworzenie zmiennej typu t_data
-
-    img.mlx = mlx_init(); // Inicjalizuj MLX
-    if (!img.mlx) // Sprawdzenie błędów
-        return (1);
-
-    img.mlx_win = mlx_new_window(img.mlx, 1920/2, 1080/2, "so_long"); // Tworzenie nowego okna
-    if (!img.mlx_win) // Sprawdzenie błędów
-        return (1);
-
-    img.img = mlx_new_image(img.mlx, 1920/2, 1080/2); // Tworzenie nowego obrazu
-    img.addr = mlx_get_data_addr(img.img, &img.bits_per_pixel, &img.line_length, &img.endian); // Pobieranie adresu danych obrazu
-
-    // Przykład rysowania piksela
-    my_mlx_pixel_put(&img, 5, 5, 0x00FF0000); // Rysowanie czerwonego piksela
-    mlx_put_image_to_window(img.mlx, img.mlx_win, img.img, 0, 0); // Wyświetlanie obrazu
-
-    // Rejestracja funkcji obsługującej zdarzenia klawiszy
-    mlx_key_hook(img.mlx_win, close_window, &img);
-    // Dodanie obsługi zamknięcia okna przez "X"
-    mlx_hook(img.mlx_win, 17, 0, close_window_cross, &img);
-    mlx_loop(img.mlx); // Rozpoczęcie pętli MLX
-    return (0);
+	if (argc != 2)
+	{
+		ft_printf("Usage: ./so_long <map_file.ber>\n");
+		return (1);
+	}
+	if (setup_map(argv[1], &game) == -1)
+	{
+		ft_printf("Error: Map is not valid\n");
+		return (1);
+	}
+	init_game(&game);
+	mlx_loop(game.mlx);
+	return (0);
 }
