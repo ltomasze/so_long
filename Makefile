@@ -6,13 +6,12 @@
 #    By: ltomasze <ltomasze@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/20 13:01:15 by ltomasze          #+#    #+#              #
-#    Updated: 2024/09/25 16:41:08 by ltomasze         ###   ########.fr        #
+#    Updated: 2024/09/27 15:01:38 by ltomasze         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = so_long
-SOURCES = src/get_next_line_utils.c src/get_next_line.c src/so_long.c src/so_long_utils_game.c \
-src/so_long_utils.c src/so_long_utils_map.c
+SOURCES = src/get_next_line_utils.c src/get_next_line.c
 OBJECTS = $(SOURCES:%.c=%.o)
 CC = cc
 CFLAGS = -Wall -Wextra -Werror -Iincludes -g
@@ -47,7 +46,7 @@ fclean: clean
 	rm -f $(NAME)
 	$(MAKE) -C ft_printf fclean
 	$(MAKE) -C libft fclean
-	$(MAKE) -C minilibx-linux fclean
+	$(MAKE) -C minilibx-linux clean
 
 re: fclean all
 
