@@ -6,12 +6,12 @@
 #    By: ltomasze <ltomasze@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/20 13:01:15 by ltomasze          #+#    #+#              #
-#    Updated: 2024/09/27 15:01:38 by ltomasze         ###   ########.fr        #
+#    Updated: 2024/09/27 15:18:17 by ltomasze         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = so_long
-SOURCES = src/get_next_line_utils.c src/get_next_line.c
+SOURCES = src/get_next_line_utils.c src/get_next_line.c src/so_long.c
 OBJECTS = $(SOURCES:%.c=%.o)
 CC = cc
 CFLAGS = -Wall -Wextra -Werror -Iincludes -g
