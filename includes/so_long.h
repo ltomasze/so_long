@@ -6,7 +6,7 @@
 /*   By: ltomasze <ltomasze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 14:19:55 by ltomasze          #+#    #+#             */
-/*   Updated: 2024/10/02 15:24:46 by ltomasze         ###   ########.fr       */
+/*   Updated: 2024/10/02 16:51:22 by ltomasze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,8 @@ typedef struct s_game
 	int		exits;
 	int		player;
 }	t_game;
+
+void	free_map(t_game *game);
 
 /* Game */
 void	init_game(t_game *game);

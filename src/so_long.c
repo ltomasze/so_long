@@ -6,7 +6,7 @@
 /*   By: ltomasze <ltomasze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 15:13:26 by ltomasze          #+#    #+#             */
-/*   Updated: 2024/10/02 15:55:36 by ltomasze         ###   ########.fr       */
+/*   Updated: 2024/10/02 17:15:04 by ltomasze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,6 @@ void	free_visited(int **visited, int height)
 	free(visited);
 }
 
-/*v = visited*/
 void	validate_reach(t_game *game, int **v)
 {
 	int	i;
@@ -82,6 +81,7 @@ void	validate_reach(t_game *game, int **v)
 			if ((game->map[i][j] == 'C' || game->map[i][j] == 'E') && !v[i][j])
 			{
 				free_visited(v, game->height);
+				free_map(game);
 				error_exit("Error: Not all coins and the exit are reachable");
 			}
 			j++;
@@ -437,6 +437,22 @@ void	count_in_row(char *row, int width, t_game *game)
 	}
 }
 
+void	free_map(t_game *game)
+{
+	int	row;
+
+	if (game->map)
+	{
+		row = 0;
+		while (row < game->height)
+		{
+			free(game->map[row]);
+			row++;
+		}
+		free(game->map);
+	}
+}
+
 void	count_elements(t_game *game)
 {
 	int	row;
@@ -451,11 +467,20 @@ void	count_elements(t_game *game)
 		row++;
 	}
 	if (game->coins == 0)
+	{
+		free_map(game);  // Zwolnij pamięć przed wyjściem
 		error_exit("Error: No coins found on the map");
+	}
 	if (game->exits != 1)
+	{
+		free_map(game);  // Zwolnij pamięć przed wyjściem
 		error_exit("Error: There must be exactly one exit on the map");
+	}
 	if (game->player != 1)
+	{
+		free_map(game);  // Zwolnij pamięć przed wyjściem
 		error_exit("Error: There must be exactly one player on the map");
+	}
 	game->total_items = game->coins;
 }
 
@@ -467,18 +492,30 @@ void	check_walls(t_game *game)
 	while (i < game->width)
 	{
 		if (game->map[0][i] != '1')
+		{
+			free_map(game);
 			error_exit("Error: Walls at the first row");
+		}
 		if (game->map[game->height - 1][i] != '1')
+		{
+			free_map(game);
 			error_exit("Error: Walls at the last row");
+		}
 		i++;
 	}
 	i = 0;
 	while (i < game->height)
 	{
 		if (game->map[i][0] != '1')
+		{
+			free_map(game);
 			error_exit("Error: Walls at the first column, width");
+		}
 		if (game->map[i][game->width - 1] != '1')
+		{
+			free_map(game);
 			error_exit("Error: Walls at the last column");
+		}
 		i++;
 	}
 }
