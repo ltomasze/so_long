@@ -11,7 +11,7 @@
 # **************************************************************************** #
 
 NAME = so_long
-SOURCES = src/get_next_line_utils.c src/get_next_line.c src/so_long.c
+SOURCES = src/get_next_line.c src/so_long.c
 OBJECTS = $(SOURCES:%.c=%.o)
 CC = cc
 CFLAGS = -Wall -Wextra -Werror -Iincludes -g
