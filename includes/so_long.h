@@ -6,7 +6,7 @@
 /*   By: ltomasze <ltomasze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 14:19:55 by ltomasze          #+#    #+#             */
-/*   Updated: 2024/10/02 16:51:22 by ltomasze         ###   ########.fr       */
+/*   Updated: 2024/10/03 10:49:54 by ltomasze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,9 @@ int		process_line_width(char *line, t_game *game);
 /* Validation */
 void	count_in_row(char *row, int width, t_game *game);
 void	count_elements(t_game *game);
-void	check_walls(t_game *game);
+void	validate_elements(t_game *game);
+void	check_horizontal_walls(t_game *game);
+void	check_vertical_walls(t_game *game);
 
 /* DFS */
 void	dfs(int **v, int x, int y, t_game *game);

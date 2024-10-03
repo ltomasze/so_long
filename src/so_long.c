@@ -6,7 +6,7 @@
 /*   By: ltomasze <ltomasze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 15:13:26 by ltomasze          #+#    #+#             */
-/*   Updated: 2024/10/02 17:15:04 by ltomasze         ###   ########.fr       */
+/*   Updated: 2024/10/03 13:00:05 by ltomasze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,18 +127,6 @@ int	key_press(int keycode, t_game *game)
 	return (0);
 }
 
-/*
-** keycode == 65307  Escape key
-** keycode == 119    W key
-** keycode == 115    S key
-** keycode == 97     A key
-** keycode == 100    D key
-*/
-/*
-** x = width
-** y = height
-*/
-
 void	*xpm_to_img(t_game *game, char *path)
 {
 	int		x;
@@ -232,10 +220,7 @@ int	handle_exit(t_game *game)
 {
 	if (game->collected_items == game->total_items)
 	{
-
 		ft_printf("Congratulations! You win!\n");
-		// mlx_destroy_window(game->mlx, game->win);
-		// exit(0);
 		close_window(game);
 	}
 	else
@@ -322,7 +307,8 @@ void	close_and_validate_map(int fd, t_game *game)
 {
 	close(fd);
 	count_elements(game);
-	check_walls(game);
+	check_horizontal_walls(game);
+	check_vertical_walls(game);
 	validate_paths(game);
 }
 
@@ -363,25 +349,25 @@ void	error_exit(const char *msg)
 
 int	close_window(t_game *game)
 {
+	int	i;
+
 	mlx_destroy_image(game->mlx, game->img_collect);
 	mlx_destroy_image(game->mlx, game->img_exit);
 	mlx_destroy_image(game->mlx, game->img_exit_open);
 	mlx_destroy_image(game->mlx, game->img_floor);
 	mlx_destroy_image(game->mlx, game->img_player);
 	mlx_destroy_image(game->mlx, game->img_wall);
-
 	mlx_destroy_window(game->mlx, game->win);
 	mlx_destroy_display(game->mlx);
-
-	int	i = 0;
+	i = 0;
 	while (game->map[i])
 		free(game->map[i++]);
 	free(game->map);
-
 	free(game->mlx);
 	exit(0);
 	return (0);
 }
+
 void	find_player_position(t_game *game, int *player_x, int *player_y)
 {
 	int	y;
@@ -466,25 +452,30 @@ void	count_elements(t_game *game)
 		count_in_row(game->map[row], game->width, game);
 		row++;
 	}
+	game->total_items = game->coins;
+	validate_elements(game);
+}
+
+void	validate_elements(t_game *game)
+{
 	if (game->coins == 0)
 	{
-		free_map(game);  // Zwolnij pamięć przed wyjściem
+		free_map(game);
 		error_exit("Error: No coins found on the map");
 	}
 	if (game->exits != 1)
 	{
-		free_map(game);  // Zwolnij pamięć przed wyjściem
+		free_map(game);
 		error_exit("Error: There must be exactly one exit on the map");
 	}
 	if (game->player != 1)
 	{
-		free_map(game);  // Zwolnij pamięć przed wyjściem
+		free_map(game);
 		error_exit("Error: There must be exactly one player on the map");
 	}
-	game->total_items = game->coins;
 }
 
-void	check_walls(t_game *game)
+void	check_horizontal_walls(t_game *game)
 {
 	int	i;
 
@@ -503,6 +494,12 @@ void	check_walls(t_game *game)
 		}
 		i++;
 	}
+}
+
+void	check_vertical_walls(t_game *game)
+{
+	int	i;
+
 	i = 0;
 	while (i < game->height)
 	{
