@@ -6,7 +6,7 @@
 /*   By: ltomasze <ltomasze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 15:13:26 by ltomasze          #+#    #+#             */
-/*   Updated: 2024/10/03 13:00:05 by ltomasze         ###   ########.fr       */
+/*   Updated: 2024/10/03 17:24:45 by ltomasze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -261,7 +261,9 @@ int	set_height_width(int fd, t_game *game)
 {
 	char	*line;
 	int		height;
+	int		res;
 
+	res = 0;
 	height = 0;
 	game->width = 0;
 	while (1)
@@ -270,13 +272,12 @@ int	set_height_width(int fd, t_game *game)
 		if (!line)
 			break ;
 		if (process_line_width(line, game) == -1)
-		{
-			free(line);
-			return (-1);
-		}
+			res = -1;
 		height++;
 		free(line);
 	}
+	if (res == -1)
+		return (-1);
 	game->height = height;
 	return (0);
 }
