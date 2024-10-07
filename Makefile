@@ -6,12 +6,15 @@
 #    By: ltomasze <ltomasze@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/20 13:01:15 by ltomasze          #+#    #+#              #
-#    Updated: 2024/09/27 15:18:17 by ltomasze         ###   ########.fr        #
+#    Updated: 2024/10/07 20:55:52 by ltomasze         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = so_long
-SOURCES = src/get_next_line.c src/so_long.c
+SOURCES = src/get_next_line.c src/so_long.c src/utils_load_map.c \
+src/utils_initialize_game.c src/utils_initialize_game1.c \
+src/utils_finish_map_validation.c src/utils_finish_map_validation1.c \
+src/utils_finish_map_validation2.c
 OBJECTS = $(SOURCES:%.c=%.o)
 CC = cc
 CFLAGS = -Wall -Wextra -Werror -Iincludes -g
