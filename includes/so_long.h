@@ -6,7 +6,7 @@
 /*   By: ltomasze <ltomasze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 14:19:55 by ltomasze          #+#    #+#             */
-/*   Updated: 2024/10/03 10:49:54 by ltomasze         ###   ########.fr       */
+/*   Updated: 2024/10/07 19:32:17 by ltomasze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,30 +43,30 @@ typedef struct s_game
 void	free_map(t_game *game);
 
 /* Game */
-void	init_game(t_game *game);
-void	*xpm_to_img(t_game *game, char *path);
+void	initialize_game(t_game *game);
+void	*load_xpm_image(t_game *game, char *path);
 void	load_textures(t_game *game);
 int		key_press(int keycode, t_game *game);
 
 /* Graphics */
-void	put_image_to_window(t_game *game, void *img, int x, int y);
-void	render_map(t_game *game);
-void	handle_move(t_game *game, int new_x, int new_y);
-int		handle_exit(t_game *game);
-void	exit_close_open(t_game *game, int x, int y);
+void	draw_image(t_game *game, void *img, int x, int y);
+void	draw_map(t_game *game);
+void	player_move(t_game *game, int new_x, int new_y);
+int		validate_exit(t_game *game);
+void	update_exit_image(t_game *game, int x, int y);
 
 /* Map */
 int		set_height_width(int fd, t_game *game);
-int		get_map_dimensions(const char *file, t_game *game);
-void	init_map_memory(t_game *game);
-void	close_and_validate_map(int fd, t_game *game);
-int		parse_map(const char *file, t_game *game);
+int		load_map_size(const char *file, t_game *game);
+void	allocate_map_memory(t_game *game);
+void	finish_map_validation(int fd, t_game *game);
+int		load_map(const char *file, t_game *game);
 
 /* Utils */
-void	error_exit(const char *msg);
-int		close_window(t_game *game);
-void	find_player_position(t_game *game, int *player_x, int *player_y);
-int		process_line_width(char *line, t_game *game);
+void	ft_error(const char *msg);
+int		destroy_window(t_game *game);
+void	locate_player(t_game *game, int *player_x, int *player_y);
+int		check_line_width(char *line, t_game *game);
 
 /* Validation */
 void	count_in_row(char *row, int width, t_game *game);
@@ -75,7 +75,7 @@ void	validate_elements(t_game *game);
 void	check_horizontal_walls(t_game *game);
 void	check_vertical_walls(t_game *game);
 
-/* DFS */
+/* DFS Depth-First Search*/
 void	dfs(int **v, int x, int y, t_game *game);
 int		**init_visited(int width, int height);
 void	free_visited(int **visited, int height);

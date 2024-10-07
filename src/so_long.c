@@ -6,7 +6,7 @@
 /*   By: ltomasze <ltomasze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 15:13:26 by ltomasze          #+#    #+#             */
-/*   Updated: 2024/10/07 16:54:51 by ltomasze         ###   ########.fr       */
+/*   Updated: 2024/10/07 19:29:42 by ltomasze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,13 +36,13 @@ int	**init_visited(int width, int height)
 
 	visited = (int **)malloc(sizeof(int *) * height);
 	if (!visited)
-		error_exit("Error: Memory allocation failed for visited array");
+		ft_error("Error: Memory allocation failed for visited array");
 	i = 0;
 	while (i < height)
 	{
 		visited[i] = (int *)malloc(sizeof(int) * width);
 		if (!visited[i])
-			error_exit("Error: Memory allocation failed for visited row");
+			ft_error("Error: Memory allocation failed for visited row");
 		j = 0;
 		while (j < width)
 		{
@@ -82,7 +82,7 @@ void	validate_reach(t_game *game, int **v)
 			{
 				free_visited(v, game->height);
 				free_map(game);
-				error_exit("Error: Not all coins and the exit are reachable");
+				ft_error("Error: Not all coins and the exit are reachable");
 			}
 			j++;
 		}
@@ -98,7 +98,7 @@ void	validate_paths(t_game *game)
 
 	start_x = -1;
 	start_y = -1;
-	find_player_position(game, &start_x, &start_y);
+	locate_player(game, &start_x, &start_y);
 	visited = init_visited(game->width, game->height);
 	dfs(visited, start_x, start_y, game);
 	validate_reach(game, visited);
@@ -110,24 +110,24 @@ int	key_press(int keycode, t_game *game)
 	int		player_x;
 	int		player_y;
 
-	find_player_position(game, &player_x, &player_y);
+	locate_player(game, &player_x, &player_y);
 	if (keycode == 65307)
 	{
 		mlx_destroy_window(game->mlx, game->win);
 		exit(0);
 	}
 	else if (keycode == 119)
-		handle_move(game, player_x, player_y - 1);
+		player_move(game, player_x, player_y - 1);
 	else if (keycode == 115)
-		handle_move(game, player_x, player_y + 1);
+		player_move(game, player_x, player_y + 1);
 	else if (keycode == 97)
-		handle_move(game, player_x - 1, player_y);
+		player_move(game, player_x - 1, player_y);
 	else if (keycode == 100)
-		handle_move(game, player_x + 1, player_y);
+		player_move(game, player_x + 1, player_y);
 	return (0);
 }
 
-void	*xpm_to_img(t_game *game, char *path)
+void	*load_xpm_image(t_game *game, char *path)
 {
 	int		x;
 	int		y;
@@ -139,57 +139,57 @@ void	*xpm_to_img(t_game *game, char *path)
 
 void	load_textures(t_game *game)
 {
-	game->img_wall = xpm_to_img(game, "./textures/wall.xpm");
+	game->img_wall = load_xpm_image(game, "./textures/wall.xpm");
 	if (!game->img_wall)
-		error_exit("Error loading wall texture");
-	game->img_floor = xpm_to_img(game, "./textures/bg.xpm");
+		ft_error("Error loading wall texture");
+	game->img_floor = load_xpm_image(game, "./textures/bg.xpm");
 	if (!game->img_floor)
-		error_exit("Error loading floor texture");
-	game->img_collect = xpm_to_img(game, "./textures/coin.xpm");
+		ft_error("Error loading floor texture");
+	game->img_collect = load_xpm_image(game, "./textures/coin.xpm");
 	if (!game->img_collect)
-		error_exit("Error loading collectible texture");
-	game->img_exit = xpm_to_img(game, "./textures/exit.xpm");
+		ft_error("Error loading collectible texture");
+	game->img_exit = load_xpm_image(game, "./textures/exit.xpm");
 	if (!game->img_exit)
-		error_exit("Error loading exit texture");
-	game->img_exit_open = xpm_to_img(game, "./textures/exit_open.xpm");
+		ft_error("Error loading exit texture");
+	game->img_exit_open = load_xpm_image(game, "./textures/exit_open.xpm");
 	if (!game->img_exit_open)
-		error_exit("Error loading open exit texture");
-	game->img_player = xpm_to_img(game, "./textures/player.xpm");
+		ft_error("Error loading open exit texture");
+	game->img_player = load_xpm_image(game, "./textures/player.xpm");
 	if (!game->img_player)
-		error_exit("Error loading player texture");
+		ft_error("Error loading player texture");
 }
 
-void	init_game(t_game *game)
+void	initialize_game(t_game *game)
 {
 	game->mlx = mlx_init();
 	if (!game->mlx)
-		error_exit("Error initializing MLX");
+		ft_error("Error initializing MLX");
 	game->win = mlx_new_window(game->mlx, game->width * 100,
 			game->height * 100, "so_long");
 	if (!game->win)
-		error_exit("Error creating window");
+		ft_error("Error creating window");
 	game->move_count = 0;
 	game->collected_items = 0;
 	load_textures(game);
-	render_map(game);
+	draw_map(game);
 	mlx_key_hook(game->win, key_press, game);
-	mlx_hook(game->win, 17, 0, close_window, game);
+	mlx_hook(game->win, 17, 0, destroy_window, game);
 }
 
-void	put_image_to_window(t_game *game, void *img, int x, int y)
+void	draw_image(t_game *game, void *img, int x, int y)
 {
 	mlx_put_image_to_window(game->mlx, game->win, img, x * 100, y * 100);
 }
 
-void	exit_close_open(t_game *game, int x, int y)
+void	update_exit_image(t_game *game, int x, int y)
 {
 	if (game->collected_items == game->total_items)
-		put_image_to_window(game, game->img_exit_open, x, y);
+		draw_image(game, game->img_exit_open, x, y);
 	else
-		put_image_to_window(game, game->img_exit, x, y);
+		draw_image(game, game->img_exit, x, y);
 }
 
-void	render_map(t_game *game)
+void	draw_map(t_game *game)
 {
 	int	x;
 	int	y;
@@ -201,27 +201,27 @@ void	render_map(t_game *game)
 		while (x < game->width)
 		{
 			if (game->map[y][x] == '1')
-				put_image_to_window(game, game->img_wall, x, y);
+				draw_image(game, game->img_wall, x, y);
 			else if (game->map[y][x] == '0')
-				put_image_to_window(game, game->img_floor, x, y);
+				draw_image(game, game->img_floor, x, y);
 			else if (game->map[y][x] == 'C')
-				put_image_to_window(game, game->img_collect, x, y);
+				draw_image(game, game->img_collect, x, y);
 			else if (game->map[y][x] == 'E')
-				exit_close_open(game, x, y);
+				update_exit_image(game, x, y);
 			else if (game->map[y][x] == 'P')
-				put_image_to_window(game, game->img_player, x, y);
+				draw_image(game, game->img_player, x, y);
 			x++;
 		}
 		y++;
 	}
 }
 
-int	handle_exit(t_game *game)
+int	validate_exit(t_game *game)
 {
 	if (game->collected_items == game->total_items)
 	{
 		ft_printf("Congratulations! You win!\n");
-		close_window(game);
+		destroy_window(game);
 	}
 	else
 	{
@@ -231,13 +231,13 @@ int	handle_exit(t_game *game)
 	return (1);
 }
 
-void	handle_move(t_game *game, int new_x, int new_y)
+void	player_move(t_game *game, int new_x, int new_y)
 {
 	int		old_x;
 	int		old_y;
 	char	tmp;
 
-	find_player_position(game, &old_x, &old_y);
+	locate_player(game, &old_x, &old_y);
 	tmp = game->map[new_y][new_x];
 	if (tmp != '1')
 	{
@@ -246,14 +246,14 @@ void	handle_move(t_game *game, int new_x, int new_y)
 			game->collected_items++;
 			game->map[new_y][new_x] = 'P';
 		}
-		else if (tmp == 'E' && !handle_exit(game))
+		else if (tmp == 'E' && !validate_exit(game))
 			return ;
 		else
 			game->map[new_y][new_x] = 'P';
 		game->map[old_y][old_x] = '0';
 		game->move_count++;
 		ft_printf("Moves: %d\n", game->move_count);
-		render_map(game);
+		draw_map(game);
 	}
 }
 
@@ -271,7 +271,7 @@ int	set_height_width(int fd, t_game *game)
 		line = get_next_line(fd);
 		if (!line)
 			break ;
-		if (process_line_width(line, game) == -1)
+		if (check_line_width(line, game) == -1)
 			res = -1;
 		height++;
 		free(line);
@@ -282,29 +282,29 @@ int	set_height_width(int fd, t_game *game)
 	return (0);
 }
 
-int	get_map_dimensions(const char *file, t_game *game)
+int	load_map_size(const char *file, t_game *game)
 {
 	int	fd;
 	int	result;
 
 	fd = open(file, O_RDONLY);
 	if (fd < 0)
-		error_exit("Error opening map file");
+		ft_error("Error opening map file");
 	result = set_height_width(fd, game);
 	close(fd);
 	if (result == -1 || game->height == 0 || game->width == 0)
-		error_exit("Error: Empty or invalid map");
+		ft_error("Error: Empty or invalid map");
 	return (0);
 }
 
-void	init_map_memory(t_game *game)
+void	allocate_map_memory(t_game *game)
 {
 	game->map = (char **)malloc(sizeof(char *) * (game->height + 1));
 	if (!game->map)
-		error_exit("Error allocating memory for map");
+		ft_error("Error allocating memory for map");
 }
 
-void	close_and_validate_map(int fd, t_game *game)
+void	finish_map_validation(int fd, t_game *game)
 {
 	close(fd);
 	count_elements(game);
@@ -313,18 +313,18 @@ void	close_and_validate_map(int fd, t_game *game)
 	validate_paths(game);
 }
 
-int	parse_map(const char *file, t_game *game)
+int	load_map(const char *file, t_game *game)
 {
 	int		fd;
 	char	*line;
 	int		row;
 
-	if (get_map_dimensions(file, game) == -1)
+	if (load_map_size(file, game) == -1)
 		return (-1);
-	init_map_memory(game);
+	allocate_map_memory(game);
 	fd = open(file, O_RDONLY);
 	if (fd < 0)
-		error_exit("Error opening map file");
+		ft_error("Error opening map file");
 	row = 0;
 	while (1)
 	{
@@ -333,22 +333,22 @@ int	parse_map(const char *file, t_game *game)
 			break ;
 		game->map[row] = ft_strtrim(line, "\n");
 		if (!game->map[row])
-			error_exit("Error duplicating map line");
+			ft_error("Error duplicating map line");
 		free(line);
 		row++;
 	}
 	game->map[row] = NULL;
-	close_and_validate_map(fd, game);
+	finish_map_validation(fd, game);
 	return (0);
 }
 
-void	error_exit(const char *msg)
+void	ft_error(const char *msg)
 {
 	perror(msg);
 	exit(EXIT_FAILURE);
 }
 
-int	close_window(t_game *game)
+int	destroy_window(t_game *game)
 {
 	int	i;
 
@@ -369,7 +369,7 @@ int	close_window(t_game *game)
 	return (0);
 }
 
-void	find_player_position(t_game *game, int *player_x, int *player_y)
+void	locate_player(t_game *game, int *player_x, int *player_y)
 {
 	int	y;
 	int	x;
@@ -390,10 +390,10 @@ void	find_player_position(t_game *game, int *player_x, int *player_y)
 		}
 		y++;
 	}
-	error_exit("Error: Player position not found");
+	ft_error("Error: Player position not found");
 }
 
-int	process_line_width(char *line, t_game *game)
+int	check_line_width(char *line, t_game *game)
 {
 	int	width;
 
@@ -462,17 +462,17 @@ void	validate_elements(t_game *game)
 	if (game->coins == 0)
 	{
 		free_map(game);
-		error_exit("Error: No coins found on the map");
+		ft_error("Error: No coins found on the map");
 	}
 	if (game->exits != 1)
 	{
 		free_map(game);
-		error_exit("Error: There must be exactly one exit on the map");
+		ft_error("Error: There must be exactly one exit on the map");
 	}
 	if (game->player != 1)
 	{
 		free_map(game);
-		error_exit("Error: There must be exactly one player on the map");
+		ft_error("Error: There must be exactly one player on the map");
 	}
 }
 
@@ -486,12 +486,12 @@ void	check_horizontal_walls(t_game *game)
 		if (game->map[0][i] != '1')
 		{
 			free_map(game);
-			error_exit("Error: Walls at the first row");
+			ft_error("Error: Walls at the first row");
 		}
 		if (game->map[game->height - 1][i] != '1')
 		{
 			free_map(game);
-			error_exit("Error: Walls at the last row");
+			ft_error("Error: Walls at the last row");
 		}
 		i++;
 	}
@@ -507,12 +507,12 @@ void	check_vertical_walls(t_game *game)
 		if (game->map[i][0] != '1')
 		{
 			free_map(game);
-			error_exit("Error: Walls at the first column, width");
+			ft_error("Error: Walls at the first column, width");
 		}
 		if (game->map[i][game->width - 1] != '1')
 		{
 			free_map(game);
-			error_exit("Error: Walls at the last column");
+			ft_error("Error: Walls at the last column");
 		}
 		i++;
 	}
@@ -527,12 +527,12 @@ int	main(int argc, char **argv)
 		ft_printf("Usage: ./so_long map.ber\n");
 		return (1);
 	}
-	if (parse_map(argv[1], &game) == -1)
+	if (load_map(argv[1], &game) == -1)
 	{
 		ft_printf("Error: Invalid map\n");
 		return (1);
 	}
-	init_game(&game);
+	initialize_game(&game);
 	mlx_loop(game.mlx);
 	return (0);
 }
