@@ -6,7 +6,7 @@
 /*   By: ltomasze <ltomasze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 20:02:21 by ltomasze          #+#    #+#             */
-/*   Updated: 2024/10/07 20:11:03 by ltomasze         ###   ########.fr       */
+/*   Updated: 2024/10/08 16:31:21 by ltomasze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ void	count_elements(t_game *game)
 	game->total_items = game->coins;
 	validate_elements(game);
 }
+
 void	check_horizontal_walls(t_game *game)
 {
 	int	i;

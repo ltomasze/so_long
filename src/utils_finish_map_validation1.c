@@ -6,7 +6,7 @@
 /*   By: ltomasze <ltomasze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 20:14:24 by ltomasze          #+#    #+#             */
-/*   Updated: 2024/10/07 20:22:43 by ltomasze         ###   ########.fr       */
+/*   Updated: 2024/10/08 16:33:05 by ltomasze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ int	**init_visited(int width, int height)
 	return (visited);
 }
 
-void	DepthFirstSearch(int **v, int x, int y, t_game *game)
+void	depthfirstsearch(int **v, int x, int y, t_game *game)
 {
 	int	a;
 	int	b;
@@ -72,10 +72,10 @@ void	DepthFirstSearch(int **v, int x, int y, t_game *game)
 	if (x < 0 || x >= b || y < 0 || y >= a || game->map[y][x] == '1' || v[y][x])
 		return ;
 	v[y][x] = 1;
-	DepthFirstSearch(v, x + 1, y, game);
-	DepthFirstSearch(v, x - 1, y, game);
-	DepthFirstSearch(v, x, y + 1, game);
-	DepthFirstSearch(v, x, y - 1, game);
+	depthfirstsearch(v, x + 1, y, game);
+	depthfirstsearch(v, x - 1, y, game);
+	depthfirstsearch(v, x, y + 1, game);
+	depthfirstsearch(v, x, y - 1, game);
 }
 
 void	validate_reach(t_game *game, int **v)
@@ -111,7 +111,7 @@ void	validate_paths(t_game *game)
 	start_y = -1;
 	locate_player(game, &start_x, &start_y);
 	visited = init_visited(game->width, game->height);
-	DepthFirstSearch(visited, start_x, start_y, game);
+	depthfirstsearch(visited, start_x, start_y, game);
 	validate_reach(game, visited);
 	free_visited(visited, game->height);
 }

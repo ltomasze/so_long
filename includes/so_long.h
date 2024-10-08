@@ -6,7 +6,7 @@
 /*   By: ltomasze <ltomasze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 14:19:55 by ltomasze          #+#    #+#             */
-/*   Updated: 2024/10/07 20:48:48 by ltomasze         ###   ########.fr       */
+/*   Updated: 2024/10/08 16:32:12 by ltomasze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void	check_vertical_walls(t_game *game);
 /*utils_finish_map_validation1*/
 void	locate_player(t_game *game, int *player_x, int *player_y);
 int		**init_visited(int width, int height);
-void	DepthFirstSearch(int **v, int x, int y, t_game *game);
+void	depthfirstsearch(int **v, int x, int y, t_game *game);
 void	validate_reach(t_game *game, int **v);
 void	validate_paths(t_game *game);
 
