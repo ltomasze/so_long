@@ -61,7 +61,7 @@ int	key_press(int keycode, t_game *game)
 	locate_player(game, &player_x, &player_y);
 	if (keycode == 65307)
 	{
-		mlx_destroy_window(game->mlx, game->win);
+		destroy_window(game);
 		exit(0);
 	}
 	else if (keycode == 119)
