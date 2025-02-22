@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: msolinsk <msolinsk@student.42warsaw.pl>    +#+  +:+       +#+        */
+/*   By: ltomasze <ltomasze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/07 21:58:53 by msolinsk          #+#    #+#             */
-/*   Updated: 2024/06/21 17:46:22 by msolinsk         ###   ########.fr       */
+/*   Created: 2025/02/22 13:58:08 by ltomasze          #+#    #+#             */
+/*   Updated: 2025/02/22 13:58:11 by ltomasze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
